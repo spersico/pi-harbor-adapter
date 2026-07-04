@@ -110,12 +110,17 @@ class PiAgent(BaseInstalledAgent):
         await self.exec_as_agent(
             environment,
             command=(
-                "mkdir -p /logs/agent; . ~/.nvm/nvm.sh; "
+                "set -euo pipefail; mkdir -p /logs/agent; . ~/.nvm/nvm.sh; "
                 "pi --print --mode json --no-session "
                 f"--provider {shlex.quote(provider)} --model {shlex.quote(model)} "
                 f"{cli_flags}"
                 f"{shlex.quote(instruction)} "
                 f"2>&1 </dev/null | grep -v '\"type\":\"message_update\"' | "
-                "stdbuf -oL tee /logs/agent/pi.jsonl"
+                "stdbuf -oL tee /logs/agent/pi.jsonl; "
+                "if grep -Eq '\"stopReason\"[[:space:]]*:[[:space:]]*\"error\"|\"errorMessage\"[[:space:]]*:' "
+                "/logs/agent/pi.jsonl; then "
+                "echo 'Pi reported a provider/agent error; see /logs/agent/pi.jsonl' >&2; "
+                "exit 1; "
+                "fi"
             ),
         )
