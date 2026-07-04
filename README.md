@@ -1,4 +1,4 @@
-# Pi Terminal-Bench adapter
+# Pi Harbor adapter
 
 Harbor adapter for running [Pi](https://www.npmjs.com/package/@earendil-works/pi-coding-agent) against Terminal-Bench tasks.
 
@@ -18,8 +18,8 @@ You'll need uv and Harbor installed. See [Harbor installation](https://www.harbo
 Clone the repository and sync the project environment:
 
 ```bash
-git clone https://github.com/<owner>/pi-tbench-adapter.git
-cd pi-tbench-adapter
+git clone https://github.com/spersico/pi-harbor-adapter.git
+cd pi-harbor-adapter
 uv sync
 ```
 
@@ -31,7 +31,7 @@ Then run tests, like the smoke tests below, with either option:
 For example:
 
 ```bash
-ADAPTER_DIR=/path/to/pi-tbench-adapter
+ADAPTER_DIR=/path/to/pi-harbor-adapter
 uv run --project "$ADAPTER_DIR" harbor --version
 ```
 
@@ -115,7 +115,7 @@ MOUNTS="[{\"type\":\"bind\",\"source\":\"$LOCAL_PI_AGENT_DIR\",\"target\":\"$PI_
 
 uv run harbor run \
   -d terminal-bench/terminal-bench-2-1 \
-  -a pi_tbench_adapter:PiAgent \
+  -a pi_harbor_adapter:PiAgent \
   -m openrouter/openai/gpt-4.1-nano \
   --ak thinking=off \
   --ae PI_CODING_AGENT_DIR="$PI_CODING_AGENT_DIR" \
