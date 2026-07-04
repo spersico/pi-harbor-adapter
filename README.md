@@ -126,6 +126,28 @@ uv run harbor run \
   --jobs-dir ./results/pi-local-agent-smoke
 ```
 
+## Scored Codex run
+
+This runs 10 Terminal-Bench 2.1 tasks with Codex auth from your mounted Pi agent folder and captures Pi's JSON event stream in Harbor results.
+
+```bash
+LOCAL_PI_AGENT_DIR="${LOCAL_PI_AGENT_DIR:-$HOME/.pi/agent}"
+PI_CODING_AGENT_DIR="${PI_CODING_AGENT_DIR:-/root/.pi/agent}"
+MOUNTS="[{\"type\":\"bind\",\"source\":\"$LOCAL_PI_AGENT_DIR\",\"target\":\"$PI_CODING_AGENT_DIR\",\"read_only\":false}]"
+
+uv run harbor run \
+  -d terminal-bench/terminal-bench-2-1 \
+  -a pi_harbor_adapter:PiAgent \
+  -m openai-codex/gpt-5.5 \
+  --ak thinking=medium \
+  --ae PI_CODING_AGENT_DIR="$PI_CODING_AGENT_DIR" \
+  --mounts "$MOUNTS" \
+  --agent-include-logs pi.jsonl \
+  -l 10 \
+  -n 1 \
+  --jobs-dir ./results/pi-codex-run
+```
+
 # Harbor reference
 
 ## Running suites
